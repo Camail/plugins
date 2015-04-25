@@ -38,44 +38,28 @@ def ponyget():
 @hook.command()
 def whenispony(inp):
     episodes = ponyget()
-    now = datetime.now()
+    now = datetime.utcnow()
     seven = timedelta(days=7)
     zero = timedelta(days=0)
     found = False
     for episode in episodes[::-1]:
         diff = episode.date-now
         if diff >= zero and diff <= seven:
-            when = str(diff)[:-7]
-            num = re.findall('\d+', when)
-            for i in num:
-                if i is num[0]:
-                    if int(i) == 1:
-                        num[0] += ' Day'
-                        continue
-                    num[0] += ' Days'
-
-                if i is num[1]:
-                    if int(i) == 1:
-                        num[1] += ' Hour'
-                        continue
-                    num[1] += ' Hours'
-
-                if i is num[2]:
-                    if int(i) == 1:
-                        num[2] += ' Minute'
-                        continue
-                    num[2] += ' Minutes'
-
-                if i is num[3]:
-                    if int(i) == 1:
-                        num[3] += ' Second'
-                        continue
-                    num[3] += ' Seconds'
-
-
+            days = diff.days
+            hours = diff.seconds//3600
+            minutes = (diff.seconds-hours*3600)//60
+            seconds = (diff.seconds-(hours*3600+minutes*60))
+            times = []
+            for time in zip([days, hours, minutes, seconds],
+                            [' day',' hour',' minute',' second']):
+                if time[0] == 1:
+                    times.append(str(time[0])+time[1])
+                else:
+                    times.append(str(time[0])+time[1]+'s')
+            
  
             fmt = "{}, {}, {}, and {} from pony!"
-            return fmt.format(*num)
+            return fmt.format(*times)
 
 @hook.command()
 def ponyRandom(inp):
