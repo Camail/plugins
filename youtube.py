@@ -21,20 +21,14 @@ def get_video_description(vid_id):
         return
 
     j = j['items'][0]
-
+    
     out = '\x02%s\x02' % j['snippet']['title']
 
     if not j['contentDetails']['duration']:
         return out
 
-    out += ' - length \x02'
-    length = j['contentDetails']['duration'][2:]
-    if 'H' in length:  
-        out += re.search(r'\d+H',length).group(0).lower() + ' '
-    if 'M' in length:
-        out += re.search(r'\d+M',length).group(0).lower() + ' '
-    out += "%s \x02" % re.search(r'\d+S',length).group(0).lower()
-
+    length = j['contentDetails']['duration'][2:].lower()
+    out += " - length \x02 %s \x02" % length
 
     return out
 
@@ -42,5 +36,3 @@ def get_video_description(vid_id):
 @hook.regex(*youtube_re)
 def youtube_url(match):
     return get_video_description(match.group(1))
-
-
