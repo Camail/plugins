@@ -89,20 +89,10 @@ def ponyRandom(inp):
 @hook.command()
 def ponyVideo(inp, db=None):
     """.ponyVideo + s00e00 <video> -- adds a video to an episode |||
-.ponyVideo find s00e00 -- retrieves video for an episode
+.ponyVideo s00e00 -- retrieves video for an episode
 """
     ponytable(db)
     inp = inp.lower()
-    if inp[:4] == "find":
-        try:
-            season, episode = (int(inp[6:8].lstrip('0')),
-                               int(inp[9:11].lstrip('0')))
-        except ValueError:
-            return "Incorrect Syntax for season or episode"
-        sql_select = "select video from ponyepisodes where season=? and episode=?"
-        video = db.execute(sql_select, (season, episode)).fetchone()
-        db.commit()
-        return video[0]
     if inp[:1] == "+":
         _id = inp[1:8]
         try:
@@ -122,6 +112,17 @@ def ponyVideo(inp, db=None):
         db.commit()
         
         return "The video for s{0:02}e{1:02} is now {2}.".format(season,episode,video)
+    try:
+        season, episode = (int(inp[1:3].lstrip('0')),
+                            int(inp[4:7].lstrip('0')))
+    except ValueError as e:
+        return "Incorrect Syntax for season or episode"
+    sql_select = "select video from ponyepisodes where season=? and episode=?"
+    video = db.execute(sql_select, (season, episode)).fetchone()
+    db.commit()
+    if not video:
+        return "I couldn't find that episode!"
+    return video[0]
 
     return "what?"
 
