@@ -1,6 +1,6 @@
 import re
 import json
-from urllib2 import urlopen, Request
+from urllib2 import urlopen
 
 
 from util import hook
