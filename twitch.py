@@ -12,7 +12,7 @@ base_url = "https://api.twitch.tv/kraken/"
 def get_channel(chan):
     chan_url = base_url + 'streams/' + chan
     req = Request(chan_url,
-                  headers= {"Clinet-ID" : "1m5m6grfe0vo5d23a8v2vuq5j5gh6bb"})
+                  headers= {"Client-ID" : "1m5m6grfe0vo5d23a8v2vuq5j5gh6bb"})
     url = urlopen(req)
     j = json.load(url)
     if not j['stream']:
@@ -35,7 +35,7 @@ def get_channel(chan):
 def get_video(prefix, video_id):
     video_url = base_url + 'videos/' + prefix + video_id
     req = Request(video_url,
-                  headers= {"Clinet-ID" : "1m5m6grfe0vo5d23a8v2vuq5j5gh6bb"})
+                  headers= {"Client-ID" : "1m5m6grfe0vo5d23a8v2vuq5j5gh6bb"})
     url = urlopen(req)
     j = json.load(url)
     if j.get('error'):
