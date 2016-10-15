@@ -1,6 +1,6 @@
 import re
 import json
-from urllib2 import urlopen
+from urllib2 import urlopen, Request
 
 
 from util import hook
@@ -11,7 +11,9 @@ base_url = "https://api.twitch.tv/kraken/"
 
 def get_channel(chan):
     chan_url = base_url + 'streams/' + chan
-    url = urlopen(chan_url)
+    req = Request(chan_url,
+                  headers= {"Clinet-ID" : "1m5m6grfe0vo5d23a8v2vuq5j5gh6bb"})
+    url = urlopen(req)
     j = json.load(url)
     if not j['stream']:
         return "Channel offline."
@@ -32,7 +34,9 @@ def get_channel(chan):
 
 def get_video(prefix, video_id):
     video_url = base_url + 'videos/' + prefix + video_id
-    url = urlopen(video_url)
+    req = Request(video_url,
+                  headers= {"Clinet-ID" : "1m5m6grfe0vo5d23a8v2vuq5j5gh6bb"})
+    url = urlopen(req)
     j = json.load(url)
     if j.get('error'):
         return j['error'] + ' ' + j['message']
